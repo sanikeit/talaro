@@ -151,7 +151,7 @@ def main():
     # VERIFY 3: GET /public/sellers?city=Sirsa
     # -------------------------------------------------------------------------
     print("\n--- VERIFY 3: GET /public/sellers?city=Sirsa ---")
-    status, body_city, _ = make_req("/public/sellers?city=Sirsa")
+    status, body_city, _ = make_req("/public/sellers?city=Sirsa&limit=100")
     assert status == 200, f"Expected 200, got {status}"
     matched_sellers = [s for s in body_city["sellers"] if s["handle"] == handle]
     print(f"Total sellers in Sirsa: {body_city['count']}")
@@ -164,7 +164,7 @@ def main():
     # VERIFY 4: GET /public/sellers?pincode=125055
     # -------------------------------------------------------------------------
     print("\n--- VERIFY 4: GET /public/sellers?pincode=125055 ---")
-    status, body_pin, _ = make_req("/public/sellers?pincode=125055")
+    status, body_pin, _ = make_req("/public/sellers?pincode=125055&limit=100")
     assert status == 200, f"Expected 200, got {status}"
     matched_pin = [s for s in body_pin["sellers"] if s["handle"] == handle]
     print(f"Total sellers with pincode 125055: {body_pin['count']}")

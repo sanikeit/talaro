@@ -14,17 +14,14 @@ export function HomeSearchBar() {
     if (query.trim()) params.set("q", query.trim());
     if (city.trim()) params.set("city", city.trim());
 
-    // Navigate to /search if query provided, or /sellers if searching primarily by city
+    // Navigate to /search with provided params
     const queryString = params.toString();
-    if (query.trim()) {
-      router.push(queryString ? `/search?${queryString}` : "/search");
-    } else {
-      router.push(queryString ? `/sellers?${queryString}` : "/sellers");
-    }
+    router.push(queryString ? `/search?${queryString}` : "/search");
   };
 
   return (
     <form
+      action="/search"
       onSubmit={handleSearch}
       className="w-full max-w-2xl bg-white border border-gray-200 rounded-2xl p-2 shadow-lg flex flex-col sm:flex-row items-center gap-2"
     >
@@ -44,7 +41,7 @@ export function HomeSearchBar() {
         </svg>
         <input
           type="text"
-          placeholder="Product or item title (e.g. runner, sandal)..."
+          placeholder="Search products, brands, or items..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="w-full text-sm text-gray-900 placeholder-gray-400 focus:outline-none"
