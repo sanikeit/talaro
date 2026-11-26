@@ -48,10 +48,6 @@ const nextConfig: NextConfig = {
         hostname: 's3.eu-central-1.amazonaws.com'
       },
       {
-        protocol: "https",
-        hostname: "mercur-testing.up.railway.app",
-      },
-      {
         protocol: 'https',
         hostname: '**'
       }

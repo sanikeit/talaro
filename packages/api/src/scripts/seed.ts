@@ -594,11 +594,12 @@ export default async function seedDemoData({ container }: ExecArgs) {
 
   logger.info("Finished seeding global product attributes.");
 
+  // Local dev only. Change before any non-local deployment.
   const SELLER_PASSWORD = "supersecret";
   const SELLER_CONFIGS = [
-    { name: "Sole Society", email: "seller@mercur.dev", first_name: "Demo", last_name: "Seller", city: "Berlin", country_code: "DE", address_1: "Alexanderplatz 1" },
-    { name: "Kickz Corner", email: "kickz@mercur.dev", first_name: "Kai", last_name: "Corner", city: "Amsterdam", country_code: "NL", address_1: "Damrak 12" },
-    { name: "Trailhead Outfitters", email: "trailhead@mercur.dev", first_name: "Tara", last_name: "Head", city: "Munich", country_code: "DE", address_1: "Marienplatz 3" },
+    { name: "Sole Society", email: "seller@talaro.local", first_name: "Demo", last_name: "Seller", city: "Berlin", country_code: "DE", address_1: "Alexanderplatz 1" },
+    { name: "Kickz Corner", email: "kickz@talaro.local", first_name: "Kai", last_name: "Corner", city: "Amsterdam", country_code: "NL", address_1: "Damrak 12" },
+    { name: "Trailhead Outfitters", email: "trailhead@talaro.local", first_name: "Tara", last_name: "Head", city: "Munich", country_code: "DE", address_1: "Marienplatz 3" },
   ];
   const PRIMARY_SELLER_EMAIL = SELLER_CONFIGS[0].email;
 
@@ -612,7 +613,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
   const { data: existingSellers } = await query.graph({
     entity: "seller",
     fields: ["id"],
-    filters: { email: PRIMARY_SELLER_EMAIL },
+    filters: { name: SELLER_CONFIGS[0].name },
   });
 
   if (existingSellers[0]) {

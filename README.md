@@ -45,8 +45,8 @@ The following capabilities are planned for subsequent phases and are **not** pre
 ## Development & Testing Credentials
 
 For local development and testing only:
-- **Admin Dashboard:** `admin@mercur-test.com` / `supersecret` (Local development only — do not deploy with these values.)
-- **Vendor Portal:** `seller@mercur.dev` / `supersecret` (Local development only — do not deploy with these values.)
+- **Admin Dashboard:** `admin@talaro.local` / `supersecret` (Local development only — do not deploy with these values.)
+- **Vendor Portal:** `seller@talaro.local` / `supersecret` (Local development only — do not deploy with these values.)
 
 Production environments enforce explicit environment variables and require unique administrator credentials.
 

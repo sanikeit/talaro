@@ -24,8 +24,8 @@ curl -I http://localhost:7002              # admin Vite dev server (should NOT s
 ```
 
 ## Admin & Vendor access
-- Admin invite: `http://localhost:9000/dashboard/invite` (set password for `admin@mercur-test.com`)
-- Vendor panel: `http://localhost:9000/seller` (demo: `seller@mercur.dev` / `supersecret`)
+- Admin invite: `http://localhost:9000/dashboard/invite` (set password for `admin@talaro.local`)
+- Vendor panel: `http://localhost:9000/seller` (demo: `seller@talaro.local` / `supersecret`)
 - Auth endpoints: `/auth/seller/emailpass`, `/auth/member/emailpass`
 
 ## macOS port conflict — AirPlay Receiver on 7000 (and 5000)

@@ -46,7 +46,7 @@ def get_admin_token():
     status, body, _ = make_req(
         "/auth/user/emailpass",
         method="POST",
-        data={"email": "admin@mercur-test.com", "password": "supersecret"}
+        data={"email": "admin@talaro.local", "password": "supersecret"}
     )
     if status == 200 and "token" in body:
         return body["token"]
