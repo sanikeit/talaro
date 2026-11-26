@@ -83,12 +83,17 @@ Production environments enforce explicit environment variables and require uniqu
    cd packages/api && bun run medusa exec ./src/scripts/seed-bootstrap-invites.ts
    ```
 
-5. Build all packages:
+5. Seed demo sellers, products, and offers (local dev only):
+   ```bash
+   cd packages/api && bun run medusa exec ./src/scripts/seed.ts
+   ```
+
+6. Build all packages:
    ```bash
    bun run build
    ```
 
-6. Start development servers:
+7. Start development servers:
    ```bash
    bun run dev
    ```

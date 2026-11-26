@@ -6,9 +6,7 @@ Only the latest commit on `main` receives security updates. There are no tagged 
 ## Reporting a Vulnerability
 Do not file public GitHub issues for security vulnerabilities.
 
-Open a private security advisory: https://github.com/sanikeit/talaro/security/advisories/new
-Or email: security@[YOUR-DOMAIN-PLACEHOLDER]
-(Replace the email placeholder with a real address before making the repo public.)
+Please open a private security advisory: https://github.com/sanikeit/talaro/security/advisories/new
 
 Include:
 - Description of the issue
