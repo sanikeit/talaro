@@ -510,6 +510,12 @@ export type Routes = {
             };
         };
         custom: typeof import("../src/api/admin/custom/route");
+        sellerRequests: typeof import("../src/api/admin/seller-requests/route") & {
+            $id: {
+                approve: typeof import("../src/api/admin/seller-requests/[id]/approve/route");
+                reject: typeof import("../src/api/admin/seller-requests/[id]/reject/route");
+            };
+        };
     };
     auth: {
         $actorType: {
@@ -889,7 +895,7 @@ export type Routes = {
                 products: typeof import("@mercurjs/core/api/vendor/sales-channels/[id]/products/route");
             };
         };
-        sellers: typeof import("@mercurjs/core/api/vendor/sellers/route") & {
+        sellers: typeof import("../src/api/vendor/sellers/route") & {
             $id: typeof import("@mercurjs/core/api/vendor/sellers/[id]/route") & {
                 address: typeof import("@mercurjs/core/api/vendor/sellers/[id]/address/route");
                 members: typeof import("@mercurjs/core/api/vendor/sellers/[id]/members/route") & {
@@ -925,5 +931,13 @@ export type Routes = {
         };
         stores: typeof import("@mercurjs/core/api/vendor/stores/route");
         uploads: typeof import("@mercurjs/core/api/vendor/uploads/route");
+        invites: typeof import("../src/api/vendor/invites/route");
+    };
+    public: {
+        products: typeof import("../src/api/public/products/route");
+        sellerRequests: typeof import("../src/api/public/seller-requests/route");
+        sellers: typeof import("../src/api/public/sellers/route") & {
+            $handle: typeof import("../src/api/public/sellers/[handle]/route");
+        };
     };
 };

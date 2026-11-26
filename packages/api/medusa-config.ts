@@ -66,5 +66,11 @@ module.exports = withMercur({
         ],
       },
     },
+    {
+      resolve: './src/modules/seller-invite',
+    },
+    {
+      resolve: './src/modules/seller-referral',
+    },
   ],
 })

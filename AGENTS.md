@@ -1,6 +1,6 @@
-# Mercur Marketplace Project
+# Talaro Marketplace Project
 
-**This is a Mercur marketplace project — an open-source AI-native multi-vendor marketplace built on MedusaJS v2.**
+**This is a Talaro marketplace project — an open-source AI-native multi-vendor marketplace built on MedusaJS v2.**
 
 ## Read the docs first
 
@@ -26,6 +26,7 @@ It covers the domain model (sellers, products, offers, attributes, commissions, 
 - **Online docs**: https://docs.mercurjs.com
 - **MCP Server**: https://docs.mercurjs.com/mcp — connect your AI agent for documentation search
 - **llms.txt (online)**: https://docs.mercurjs.com/llms.txt
+- **Seller Onboarding & Architecture Notes**: `docs/SELLER_ONBOARDING_NOTES.md` — notes on multi-process concurrency, hook lifecycles, and referral quota reset behaviors.
 
 ## Configuration Files
 

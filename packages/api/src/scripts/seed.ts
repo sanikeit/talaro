@@ -280,7 +280,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
     input: {
       selector: { id: store.id },
       update: {
-        name: 'Mercur Marketplace',
+        name: 'Talaro Marketplace',
         default_sales_channel_id: defaultSalesChannel[0].id,
       },
     },

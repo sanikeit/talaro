@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PROTECTED_ROUTES } from './lib/constants';
 import { isTokenExpired } from './lib/helpers/token';
 
-const BACKEND_URL = process.env.MEDUSA_BACKEND_URL;
+const BACKEND_URL = process.env.MEDUSA_BACKEND_URL || process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || 'http://127.0.0.1:9000';
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY;
-const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || 'us';
+const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || 'in';
 
 const makeAuthRedirect = (
   req: NextRequest,
@@ -34,44 +34,43 @@ const regionMapCache = {
 async function getRegionMap(cacheId: string) {
   const { regionMap, regionMapUpdated } = regionMapCache;
 
-  if (!BACKEND_URL) {
-    throw new Error(
-      'proxy.ts: Error fetching regions. Did you set up regions in your Medusa Admin and define a MEDUSA_BACKEND_URL environment variable? Note that the variable is no longer named NEXT_PUBLIC_MEDUSA_BACKEND_URL.'
-    );
+  if (regionMap.size > 0 && regionMapUpdated >= Date.now() - 3600 * 1000) {
+    return regionMapCache.regionMap;
   }
 
-  if (!regionMap.keys().next().value || regionMapUpdated < Date.now() - 3600 * 1000) {
-    // Plain fetch keeps the proxy free of the SDK and Next runtime imports.
-    const { regions } = await fetch(`${BACKEND_URL}/store/regions`, {
+  try {
+    const response = await fetch(`${BACKEND_URL}/store/regions`, {
       headers: {
-        'x-publishable-api-key': PUBLISHABLE_API_KEY!
+        'x-publishable-api-key': PUBLISHABLE_API_KEY || ''
       },
       next: {
         revalidate: 3600,
         tags: [`regions-${cacheId}`]
       },
       cache: 'force-cache'
-    }).then(async response => {
-      const json = await response.json();
+    });
 
-      if (!response.ok) {
-        throw new Error(json.message);
+    if (response.ok) {
+      const { regions } = await response.json();
+      if (Array.isArray(regions)) {
+        regions.forEach((region: HttpTypes.StoreRegion) => {
+          region.countries?.forEach(c => {
+            regionMapCache.regionMap.set(c.iso_2 ?? '', region);
+          });
+        });
+        regionMapCache.regionMapUpdated = Date.now();
       }
-
-      return json;
-    });
-
-    if (!regions?.length) {
-      throw new Error('No regions found. Please set up regions in your Medusa Admin.');
     }
+  } catch (error) {
+    console.warn('proxy.ts: Unable to fetch regions from backend, using in fallback:', error);
+  }
 
-    regions.forEach((region: HttpTypes.StoreRegion) => {
-      region.countries?.forEach(c => {
-        regionMapCache.regionMap.set(c.iso_2 ?? '', region);
-      });
-    });
-
-    regionMapCache.regionMapUpdated = Date.now();
+  if (regionMapCache.regionMap.size === 0) {
+    regionMapCache.regionMap.set('in', {
+      id: 'reg_inr_default',
+      currency_code: 'inr',
+      name: 'India'
+    } as any);
   }
 
   return regionMapCache.regionMap;

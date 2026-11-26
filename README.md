@@ -1,8 +1,8 @@
-# Mercur Basic Template
+# Talaro Basic Template
 
 > **Note:** Requires Node 22+ (Node 20 fails at `bun create mercur-app`).
 
-This template comes configured with the bare minimum to get started building your marketplace with Mercur.
+This template comes configured with the bare minimum to get started building your marketplace with Talaro.
 
 ## Quick Start
 
@@ -72,7 +72,7 @@ This monorepo includes the following packages and apps:
 │       │   ├── subscribers/ # Event subscribers
 │       │   └── workflows/   # Business workflows
 │       └── medusa-config.ts
-├── blocks.json         # Mercur blocks configuration
+├── blocks.json         # Talaro blocks configuration
 ├── package.json
 └── turbo.json
 ```
@@ -87,7 +87,7 @@ This project has some additional tools already setup for you:
 
 ## How It Works
 
-The Mercur basic template is built on top of [Medusa](https://medusajs.com) and is pre-configured for marketplace functionality.
+The Talaro basic template is built on top of [Medusa](https://medusajs.com) and is pre-configured for marketplace functionality.
 
 ### Modules
 

@@ -59,6 +59,20 @@ const nextConfig: NextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true
+  },
+  async redirects() {
+    return [
+      {
+        source: '/sellers/:handle',
+        destination: '/s/:handle',
+        permanent: false,
+      },
+      {
+        source: '/:locale/sellers/:handle',
+        destination: '/:locale/s/:handle',
+        permanent: false,
+      },
+    ];
   }
 };
 
