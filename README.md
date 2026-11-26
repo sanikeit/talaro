@@ -31,7 +31,24 @@ In India's Tier 2 and Tier 3 markets, national e-commerce platforms ship items f
 - **Runtime:** Bun 1.2+ or Node.js 22+.
 - **Domain Flows:** Seller invite verification → multi-step registration workflow → address synchronization → referral quota validation → public rate-limited read API.
 
-> **Note on Commerce Features:** Standard e-commerce features (cart, checkout, payment gateways, and order management) are intentionally disabled in this build. Deals close off-platform on WhatsApp.
+> **Note on Commerce Features:** Standard e-commerce features (cart, checkout, payment gateways, and order management) are intentionally disabled in this build. Deals close off-platform directly between buyers and sellers on WhatsApp.
+
+## Roadmap / Not Yet Built
+
+The following capabilities are planned for subsequent phases and are **not** present in the current release:
+- **24-Hour Hold:** Requesting inventory holds directly from seller storefront cards.
+- **RFQ Routing:** Broadcasting requests for quotation to multiple verified vendors in a district.
+- **Dedicated Mobile App:** Native Android and iOS applications for buyers and sellers.
+- **AI & Structured Data Integration:** Dedicated Model Context Protocol (MCP) server endpoints, `llms.txt`, and rich JSON-LD catalog feeds.
+- **In-Platform Checkout & Escrow:** On-platform digital payments and order settlement workflows.
+
+## Development & Testing Credentials
+
+For local development and testing only:
+- **Admin Dashboard:** `admin@mercur-test.com` / `supersecret` (Local development only — do not deploy with these values.)
+- **Vendor Portal:** `seller@mercur.dev` / `supersecret` (Local development only — do not deploy with these values.)
+
+Production environments enforce explicit environment variables and require unique administrator credentials.
 
 ## Getting started
 
@@ -66,7 +83,12 @@ In India's Tier 2 and Tier 3 markets, national e-commerce platforms ship items f
    cd packages/api && bun run medusa exec ./src/scripts/seed-bootstrap-invites.ts
    ```
 
-5. Start development servers:
+5. Build all packages:
+   ```bash
+   bun run build
+   ```
+
+6. Start development servers:
    ```bash
    bun run dev
    ```
