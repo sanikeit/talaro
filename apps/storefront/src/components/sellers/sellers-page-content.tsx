@@ -37,7 +37,7 @@ export async function SellersPageContent({ searchParams }: SellersPageContentPro
       {/* Title & Subtitle */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">
-          Verified hardware suppliers near you
+          Find verified local suppliers near you
         </h1>
         <p className="text-base text-gray-600">
           Every seller is verified. Contact directly on WhatsApp.

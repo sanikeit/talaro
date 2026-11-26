@@ -87,61 +87,47 @@ export const createSellerInviteWorkflow = createWorkflow(
 );
 
 export default async function seedBootstrapInvites({ container }: ExecArgs) {
+  if (process.env.NODE_ENV === "production") {
+    console.error("Refusing to seed bootstrap invites in production environment.");
+    process.exit(1);
+  }
+
+  const rawCodes = process.env.BOOTSTRAP_INVITE_CODES;
+  if (!rawCodes || !rawCodes.trim()) {
+    console.error(
+      "BOOTSTRAP_INVITE_CODES not set. This script will not create invite codes without explicit env configuration. See .env.example."
+    );
+    process.exit(1);
+  }
+
+  const codes = rawCodes
+    .split(",")
+    .map((c) => c.trim())
+    .filter(Boolean);
+
+  if (codes.length === 0) {
+    console.error(
+      "BOOTSTRAP_INVITE_CODES not set. This script will not create invite codes without explicit env configuration. See .env.example."
+    );
+    process.exit(1);
+  }
+
   const sellerInviteService = container.resolve(SELLER_INVITE_MODULE) as any;
 
   console.log("=== Seeding Bootstrap Admin Invites ===");
 
   const expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000); // now + 1 year
 
-  // =========================================================================
-  // LEGACY: pre-rename pilot codes. Kept for backwards compat with existing test scripts.
-  // PRODUCTION BLOCKER: set status='revoked' on these two rows before public launch.
-  // =========================================================================
-  const bootstrapCodes = [
-    {
-      code: "MERCUR-INVITE-2026",
-      created_by: "system",
-      referred_by_seller_id: null,
-      role: "admin",
-      max_uses: 20,
-      use_count: 0,
-      status: "active",
-      expires_at: expiresAt,
-    },
-    {
-      code: "MERCUR-BETA-001",
-      created_by: "system",
-      referred_by_seller_id: null,
-      role: "admin",
-      max_uses: 20,
-      use_count: 0,
-      status: "active",
-      expires_at: expiresAt,
-    },
-    // =========================================================================
-    // TALARO Bootstrap Admin Invites
-    // =========================================================================
-    {
-      code: "TALARO-INVITE-2026",
-      created_by: "system",
-      referred_by_seller_id: null,
-      role: "admin",
-      max_uses: 20,
-      use_count: 0,
-      status: "active",
-      expires_at: expiresAt,
-    },
-    {
-      code: "TALARO-BETA-001",
-      created_by: "system",
-      referred_by_seller_id: null,
-      role: "admin",
-      max_uses: 20,
-      use_count: 0,
-      status: "active",
-      expires_at: expiresAt,
-    },
-  ];
+  const bootstrapCodes = codes.map((code) => ({
+    code,
+    created_by: "system",
+    referred_by_seller_id: null,
+    role: "admin",
+    max_uses: 20,
+    use_count: 0,
+    status: "active",
+    expires_at: expiresAt,
+  }));
 
   let createdCount = 0;
   for (const item of bootstrapCodes) {

@@ -23,29 +23,33 @@ export interface SellerDetail {
 
 interface SellerDetailContentProps {
   handle: string;
+  initialData?: any;
   backHref?: string;
 }
 
 export async function SellerDetailContent({
   handle,
+  initialData,
   backHref = "/sellers",
 }: SellerDetailContentProps) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:9000";
 
   let status = 200;
-  let data: any = null;
+  let data: any = initialData || null;
 
-  try {
-    const res = await fetch(`${apiUrl}/public/sellers/${handle}`, {
-      next: { revalidate: 30 },
-    });
-    status = res.status;
-    if (res.ok) {
-      data = await res.json();
+  if (!data) {
+    try {
+      const res = await fetch(`${apiUrl}/public/sellers/${handle}`, {
+        next: { revalidate: 30 },
+      });
+      status = res.status;
+      if (res.ok) {
+        data = await res.json();
+      }
+    } catch (error: any) {
+      console.error(`Error loading seller ${handle}:`, error);
+      status = 500;
     }
-  } catch (error: any) {
-    console.error(`Error loading seller ${handle}:`, error);
-    status = 500;
   }
 
   if (status === 404 || !data?.seller) {

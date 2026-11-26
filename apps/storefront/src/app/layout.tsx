@@ -11,12 +11,12 @@ import { Providers } from './providers';
 export const metadata: Metadata = {
   title: {
     template: `%s | ${
-      process.env.NEXT_PUBLIC_SITE_NAME || 'Talaro - Marketplace Storefront'
+      process.env.NEXT_PUBLIC_SITE_NAME || 'Talaro'
     }`,
-    default: process.env.NEXT_PUBLIC_SITE_NAME || 'Talaro - Marketplace Storefront'
+    default: process.env.NEXT_PUBLIC_SITE_NAME || 'Talaro'
   },
   description:
-    process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'Talaro - Marketplace Storefront',
+    process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'Find verified local suppliers near you',
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000')
 };
 

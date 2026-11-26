@@ -39,7 +39,7 @@ def main():
     status, content, final_url = get("/sellers")
     print(f"Status: {status}, Final URL: {final_url}")
     assert status == 200, f"Expected status 200, got {status}"
-    assert "Verified hardware suppliers near you" in content, "Page title missing"
+    assert "Find verified local suppliers near you" in content, "Page title missing"
     assert "Every seller is verified. Contact directly on WhatsApp." in content, "Subtitle missing"
 
     # Find seller card handles
@@ -123,7 +123,7 @@ def main():
     print("\n[TEST 9] Home page hero and search bar")
     status, home_content, _ = get("/")
     assert status == 200, f"Expected 200, got {status}"
-    assert "Find verified hardware suppliers near you" in home_content, "Hero heading missing"
+    assert "Find verified local suppliers near you" in home_content, "Hero heading missing"
     assert "Browse all sellers" in home_content, "Browse all sellers CTA missing"
     assert "Become a seller" in home_content, "Become a seller link missing"
     assert 'action="/search"' in home_content or 'placeholder="Product or item title' in home_content, "Search bar missing"

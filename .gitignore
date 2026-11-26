@@ -1,45 +1,47 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # Dependencies
-node_modules
+node_modules/
 .pnp
 .pnp.js
 
-# Local env files
+# Environment variables
 .env
 .env.local
+.env.*.local
 .env.development.local
 .env.test.local
 .env.production.local
+!.env.example
+!.env.template
 
-# Testing
-coverage
-
-# Turbo
-.turbo
-
-# Vercel
-.vercel
-
-# Build Outputs
+# Build & Runtime
+.medusa/
+.medusa
 .next/
 out/
-build
-dist
+build/
+dist/
+.turbo/
+.vercel
 
-# Yarn (PnP)
+# Yarn / Package Managers
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
 
-# Debug
+# Testing & Coverage
+coverage/
+
+# Logs & Debug
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Misc
+# IDE & OS
 .DS_Store
+.idea/
+.vscode/
+*.tsbuildinfo
 *.pem
-.medusa

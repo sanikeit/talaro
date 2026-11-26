@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { Metadata } from "next";
+import { SellerRequestForm } from "@/components/sellers/seller-request-form";
 
 export const metadata: Metadata = {
-  title: "Become a Seller | Talaro",
-  description: "Apply to become a verified hardware seller on Talaro.",
+  title: "Become a Seller",
+  description: "Apply to become a verified seller on Talaro.",
 };
 
 export default function BecomeASellerPage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:9000";
-
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <div className="text-center mb-12">
@@ -16,10 +15,10 @@ export default function BecomeASellerPage() {
           Seller Onboarding
         </span>
         <h1 className="text-4xl font-extrabold text-gray-900 mt-4 mb-3">
-          Sell to Thousands of Hardware Buyers
+          Sell to Thousands of Local Buyers
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Talaro connects verified local hardware suppliers directly with contractors, builders, and tradespeople via WhatsApp.
+          Talaro connects verified local shops and suppliers directly with buyers and businesses across every category via WhatsApp.
         </p>
       </div>
 
@@ -61,31 +60,24 @@ export default function BecomeASellerPage() {
         </div>
       </div>
 
+      {/* Seller Application Form */}
+      <div className="mb-12">
+        <SellerRequestForm />
+      </div>
+
       <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-3">
-          Ready to join the pilot?
+        <h2 className="text-xl font-bold text-gray-900 mb-2">
+          Want to explore first?
         </h2>
         <p className="text-sm text-gray-600 mb-6 max-w-xl mx-auto">
-          You can submit a seller request via our public API endpoint at{" "}
-          <code className="text-xs bg-gray-200 px-2 py-1 rounded">
-            POST {apiUrl}/public/seller-requests
-          </code>{" "}
-          or reach out to our onboarding team directly.
+          See how other verified suppliers showcase their shops and products on Talaro.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="mailto:onboarding@talaro.com?subject=Seller%20Onboarding%20Request"
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition-colors shadow-sm"
-          >
-            Email Onboarding Team
-          </a>
-          <Link
-            href="/sellers"
-            className="px-6 py-3 border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium text-sm rounded-xl transition-colors"
-          >
-            Browse Existing Sellers
-          </Link>
-        </div>
+        <Link
+          href="/sellers"
+          className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium text-sm rounded-xl transition-colors"
+        >
+          Browse Existing Sellers
+        </Link>
       </div>
     </div>
   );

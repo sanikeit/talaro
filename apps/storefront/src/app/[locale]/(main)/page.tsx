@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { HomeSearchBar } from "@/components/home/home-search-bar";
 
 export const metadata: Metadata = {
-  title: "Find Verified Hardware Suppliers Near You | Talaro",
-  description: "Browse verified local hardware wholesalers, distributors, and dealers. Contact directly on WhatsApp.",
+  title: "Verified local suppliers near you",
+  description: "Discover verified local shops and suppliers across every category. Contact directly on WhatsApp.",
 };
 
 export default function Home() {
@@ -21,11 +21,11 @@ export default function Home() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight mb-6">
-            Find verified hardware suppliers near you
+            Find verified local suppliers near you
           </h1>
 
           <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-            Connect directly with verified local wholesalers, distributors, and dealers on {platform}. All pricing in INR. No middlemen.
+            Connect directly with verified local shops, wholesalers, and distributors across every category on {platform}. All pricing in INR. No middlemen.
           </p>
 
           {/* Search Bar */}

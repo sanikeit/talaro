@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { SellerDetailContent } from "@/components/sellers/seller-detail-content";
 
 export async function generateMetadata({
@@ -16,7 +17,7 @@ export async function generateMetadata({
 
     if (!res.ok) {
       return {
-        title: "Seller Not Found | Talaro",
+        title: "Seller Not Found",
         description: "Seller not found or not currently active.",
       };
     }
@@ -24,14 +25,15 @@ export async function generateMetadata({
     const data = await res.json();
     const seller = data.seller;
     const locationStr = seller.city ? ` in ${seller.city}` : "";
+    const rawDesc = `${seller.name}${locationStr} — verified supplier on Talaro.${seller.description ? " " + seller.description : ""}`;
 
     return {
-      title: `${seller.name} | Talaro`,
-      description: `${seller.name}${locationStr} — verified supplier on Talaro.`,
+      title: seller.name || "Seller",
+      description: rawDesc.slice(0, 160),
     };
   } catch {
     return {
-      title: "Seller | Talaro",
+      title: "Seller",
       description: "Verified supplier on Talaro.",
     };
   }
@@ -43,5 +45,33 @@ export default async function LocalizedSellerDetailPage({
   params: Promise<{ handle: string; locale: string }>;
 }) {
   const { handle, locale } = await params;
-  return <SellerDetailContent handle={handle} backHref={`/${locale}/sellers`} />;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:9000";
+
+  let sellerData: any = null;
+  try {
+    const res = await fetch(`${apiUrl}/public/sellers/${handle}`, {
+      next: { revalidate: 30 },
+    });
+    if (!res.ok) {
+      notFound();
+    }
+    sellerData = await res.json();
+  } catch (err: any) {
+    if (err?.digest?.startsWith("NEXT_NOT_FOUND")) {
+      throw err;
+    }
+    notFound();
+  }
+
+  if (!sellerData?.seller) {
+    notFound();
+  }
+
+  return (
+    <SellerDetailContent
+      handle={handle}
+      initialData={sellerData}
+      backHref={`/${locale}/sellers`}
+    />
+  );
 }

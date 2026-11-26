@@ -1,149 +1,77 @@
-# Talaro Basic Template
+# Talaro
 
-> **Note:** Requires Node 22+ (Node 20 fails at `bun create mercur-app`).
+A verified, referral-only supplier network for local commerce. Buyers search, contact sellers directly on WhatsApp, no middlemen.
 
-This template comes configured with the bare minimum to get started building your marketplace with Talaro.
+[![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-blue.svg)](LICENSE)
+[![Node Version](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen.svg)](https://nodejs.org)
+[![Bun Version](https://img.shields.io/badge/bun-%3E%3D1.2.0-black.svg)](https://bun.sh)
 
-## Quick Start
+## What Talaro is
 
-To spin up this template locally, follow these steps:
+Talaro is a hyperlocal discovery network connecting verified local suppliers directly with buyers and businesses. Sellers cannot simply register; they can only join via admin invite or referral from an existing verified seller with active referral quota. Every shop undergoes verification (shop-front photo, invoice/bill-book verification, and proof of legitimate local inventory). Buyers search for products across verified sellers in their area, compare local INR pricing, and connect directly on WhatsApp to negotiate and finalize orders. The platform operates strictly as a discovery and connection layer—there are no online carts, checkouts, or platform payment processing fees.
 
-### Clone
+## Why this exists
 
-If you've already cloned this repo, skip to [Development](#development).
+In India's Tier 2 and Tier 3 markets, national e-commerce platforms ship items from distant metropolitan warehouses over multiple days, whereas trusted neighborhood wholesalers and shops already hold immediate stock on their shelves. Talaro connects local buyers directly with nearby suppliers, providing real-time stock discovery with the immediacy of same-day local pickup and direct WhatsApp communication.
 
-### Development
+## Key features
 
-1. First [clone the repo](#clone) if you have not done so already
+- **Invite-Gated Seller Onboarding:** Sellers register strictly using database-backed invite codes from platform admins or verified peer referrals.
+- **Referral Quota & Reputation:** Verified sellers earn referral quotas based on tenure and standing; if a referred seller is suspended, their referrer's standing and quotas are penalized.
+- **Public Local Search:** Buyer-facing search endpoints and storefront interface supporting city and PIN code filtering, returning only active, INR-priced offers.
+- **INR-Only Commerce Lock:** Offers and pricing are restricted to Indian Rupees (`INR`), preventing cross-currency errors during the pilot.
+- **WhatsApp Direct Interaction:** Deep links from seller shop profiles and individual product listings directly launch WhatsApp chats pre-populated with seller and product context.
+- **Server-Side Rendered Storefront:** High-performance buyer storefront built on Next.js 16 with App Router, featuring responsive seller profiles, catalog grids, and dynamic metadata.
 
-2. Copy the example environment variables:
+## Architecture
 
-```bash
-cd my-project
-cp packages/api/.env.template packages/api/.env
-```
+- **Backend:** MedusaJS v2 extended with Mercur marketplace modular framework.
+- **Storefront:** Next.js 16 with React 19 and Tailwind CSS.
+- **Database:** PostgreSQL with transactional schema links between seller profiles, addresses, and invite logs.
+- **Runtime:** Bun 1.2+ or Node.js 22+.
+- **Domain Flows:** Seller invite verification → multi-step registration workflow → address synchronization → referral quota validation → public rate-limited read API.
 
-3. Update the `.env` file with your database connection string and other required variables:
+> **Note on Commerce Features:** Standard e-commerce features (cart, checkout, payment gateways, and order management) are intentionally disabled in this build. Deals close off-platform on WhatsApp.
 
-```
-DATABASE_URL=postgres://user:password@localhost:5432/mercur
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=your-super-secret-jwt-key
-COOKIE_SECRET=your-super-secret-cookie-key
-```
+## Getting started
 
-4. Install dependencies and start the dev server:
+### Prerequisites
 
-```bash
-bun install
-bun dev
-```
+- **Node.js:** `>= 22.0.0`
+- **Bun:** `>= 1.2.0`
+- **PostgreSQL:** `>= 14.0`
 
-5. Open `http://localhost:9000` to access the Medusa backend
-6. Open `http://localhost:7000` to access the admin dashboard
-6. Open `http://localhost:7001` to access the vendor dashboard
+### Install & Run
 
-That's it! Follow the on-screen instructions to login and create your first admin user.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sanikeit/talaro.git
+   cd talaro
+   ```
 
-## What's Inside
+2. Install dependencies:
+   ```bash
+   bun install
+   ```
 
-This monorepo includes the following packages and apps:
+3. Configure environment variables:
+   ```bash
+   cp packages/api/.env.template packages/api/.env
+   cp apps/storefront/.env.template apps/storefront/.env.local
+   ```
 
-### Apps and Packages
+4. Seed bootstrap invites (local dev only):
+   ```bash
+   # Add bootstrap codes to packages/api/.env, then run:
+   cd packages/api && bun run medusa exec ./src/scripts/seed-bootstrap-invites.ts
+   ```
 
-- `packages/api` - The Medusa backend with all marketplace functionality
-- `apps/admin` - Admin dashboard customizations
-- `apps/vendor` - Vendor portal customizations
+5. Start development servers:
+   ```bash
+   bun run dev
+   ```
 
-### Project Structure
-
-```
-├── apps/
-│   ├── admin/          # Admin dashboard extensions
-│   └── vendor/         # Vendor portal extensions
-├── packages/
-│   └── api/            # Medusa backend
-│       ├── src/
-│       │   ├── api/         # Custom API routes
-│       │   ├── jobs/        # Background jobs
-│       │   ├── links/       # Module links
-│       │   ├── modules/     # Custom modules
-│       │   ├── scripts/     # CLI scripts
-│       │   ├── subscribers/ # Event subscribers
-│       │   └── workflows/   # Business workflows
-│       └── medusa-config.ts
-├── blocks.json         # Talaro blocks configuration
-├── package.json
-└── turbo.json
-```
-
-### Utilities
-
-This project has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Turborepo](https://turborepo.dev/) for monorepo management
-- [Prettier](https://prettier.io) for code formatting
-
-## How It Works
-
-The Talaro basic template is built on top of [Medusa](https://medusajs.com) and is pre-configured for marketplace functionality.
-
-### Modules
-
-Custom modules allow you to extend the core functionality. See the [Modules](https://docs.medusajs.com/learn/fundamentals/modules) docs for details.
-
-### Workflows
-
-Workflows define multi-step business processes. See the [Workflows](https://docs.medusajs.com/learn/fundamentals/workflows) docs for details.
-
-### API Routes
-
-Custom API routes expose HTTP endpoints. See the [API Routes](https://docs.medusajs.com/learn/fundamentals/api-routes) docs for details.
-
-### Links
-
-Links define relationships between modules. See the [Links](https://docs.medusajs.com/learn/fundamentals/links) docs for details.
-
-## Adding Blocks
-
-You can extend your project with pre-built blocks using the Mercur CLI:
-
-```bash
-bunx @mercurjs/cli add block-name
-```
-
-Configure your block sources in `blocks.json`:
-
-```json
-{
-  "aliases": {
-    "workflows": "packages/api/src/workflows",
-    "links": "packages/api/src/links",
-    "api": "packages/api/src/api",
-    "modules": "packages/api/src/modules"
-  },
-  "registries": {}
-}
-```
-
-## Build
-
-To build all apps and packages:
-
-```bash
-bun run build
-```
-
-## AI agents
-
-This project bundles its documentation as a dependency (`@mercurjs/docs`), so AI agents can read it offline and version-matched to your installed packages. Point your agent at:
-
-- `node_modules/@mercurjs/docs/llms.txt` — an index of every page
-- `node_modules/@mercurjs/docs/content/**/*.mdx` — the full pages
-
-`CLAUDE.md` and `AGENTS.md` instruct agents to read these before making changes. The same docs are online at [docs.mercurjs.com](https://docs.mercurjs.com).
-
-## Questions
-
-If you have any issues or questions start a [GitHub discussion](https://github.com/mercurjs/mercur/discussions).
+   - **Storefront:** http://localhost:8000
+   - **Backend API:** http://localhost:9000
+   - **Vendor Portal:** http://localhost:7001
+   - **Admin Dashboard:** http://localhost:7002
