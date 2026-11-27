@@ -1,0 +1,49 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "storefront": {
+      "root": "apps/storefront",
+      "framework": "nextjs"
+    },
+    "admin": {
+      "root": "apps/admin",
+      "framework": "vite"
+    },
+    "vendor": {
+      "root": "apps/vendor",
+      "framework": "vite"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/dashboard/(.*)",
+      "destination": {
+        "service": "admin"
+      }
+    },
+    {
+      "source": "/dashboard",
+      "destination": {
+        "service": "admin"
+      }
+    },
+    {
+      "source": "/seller/(.*)",
+      "destination": {
+        "service": "vendor"
+      }
+    },
+    {
+      "source": "/seller",
+      "destination": {
+        "service": "vendor"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "storefront"
+      }
+    }
+  ]
+}

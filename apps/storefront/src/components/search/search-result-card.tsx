@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { buildProductEnquiryLink } from "@/lib/whatsapp";
+import { HoldButton } from "@/components/hold/hold-button";
 
 export interface SearchProduct {
   id: string;
   title: string;
   thumbnail: string | null;
   description: string | null;
+  is_held?: boolean;
   seller: {
     id: string;
     handle: string;
@@ -20,6 +22,7 @@ export interface SearchProduct {
     price: number;
     currency: string;
     stock_status: string;
+    is_held?: boolean;
   }>;
 }
 
@@ -39,9 +42,9 @@ export function SearchResultCard({ product }: SearchResultCardProps) {
     .map((o) => o.price)
     .filter((p) => typeof p === "number" && !isNaN(p));
 
+  const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
   let priceDisplay: string;
   if (prices.length > 0) {
-    const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
     if (minPrice === maxPrice) {
       priceDisplay = `₹${minPrice.toLocaleString("en-IN")}`;
@@ -81,6 +84,11 @@ export function SearchResultCard({ product }: SearchResultCardProps) {
               </svg>
               <span className="text-xs">No image preview</span>
             </div>
+          )}
+          {product.is_held && (
+            <span className="absolute top-2 left-2 z-10 px-2 py-0.5 bg-amber-100/95 text-amber-800 text-[11px] font-bold rounded-md border border-amber-300 shadow-xs backdrop-blur-xs">
+              On Hold (24h)
+            </span>
           )}
         </div>
 
@@ -163,13 +171,16 @@ export function SearchResultCard({ product }: SearchResultCardProps) {
             </button>
           )}
 
-          {/* Visit shop CTA */}
-          <Link
-            href={`/s/${seller.handle}`}
-            className="inline-flex items-center justify-center px-3 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-xs font-medium rounded-lg transition-colors"
-          >
-            Visit shop
-          </Link>
+          {/* 24h hold CTA */}
+          <HoldButton
+            offerId={product.offers?.[0]?.id || product.id}
+            productTitle={product.title}
+            productThumbnail={product.thumbnail}
+            price={minPrice}
+            sellerName={seller.name}
+            sellerCity={seller.city}
+            isHeld={product.is_held}
+          />
         </div>
       </div>
     </div>

@@ -220,7 +220,7 @@ def main():
     run_psql(insert_sql)
     print(f"Created active offer {offer_id} for product {product_id} under seller {seller_id}")
 
-    status, prod_city, _ = make_req(f"/public/products?q=Vantage&city=Sirsa")
+    status, prod_city, _ = make_req(f"/public/products?q=Vantage&city=Sirsa&limit=100")
     assert status == 200, f"Expected 200, got {status}"
     print(f"Products matching 'Vantage' in 'Sirsa': {prod_city['count']}")
     assert prod_city["count"] > 0, "Must return at least 1 product in Sirsa"

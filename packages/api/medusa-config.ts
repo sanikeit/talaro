@@ -72,5 +72,8 @@ module.exports = withMercur({
     {
       resolve: './src/modules/seller-referral',
     },
+    {
+      resolve: './src/modules/seller-hold',
+    },
   ],
 })

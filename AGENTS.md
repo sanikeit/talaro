@@ -27,6 +27,8 @@ It covers the domain model (sellers, products, offers, attributes, commissions, 
 - **MCP Server**: https://docs.mercurjs.com/mcp — connect your AI agent for documentation search
 - **llms.txt (online)**: https://docs.mercurjs.com/llms.txt
 - **Seller Onboarding & Architecture Notes**: `docs/SELLER_ONBOARDING_NOTES.md` — notes on multi-process concurrency, hook lifecycles, and referral quota reset behaviors.
+- **24-Hour Request Hold Architecture**: `docs/HOLD_SYSTEM_DESIGN.md` — architecture specification, state machine, abuse prevention, and migration plan for courtesy inventory holds.
+- **Deployment & Infrastructure Guide**: `docs/DEPLOYMENT_AND_INFRASTRUCTURE.md` — Railway (current target) and Supabase (future roadmap target) infrastructure topology and migration runbook.
 
 ## Configuration Files
 

@@ -1,6 +1,7 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
 import { applyRateLimit } from "../../../utils/rate-limiter";
+import { SELLER_HOLD_MODULE } from "../../../modules/seller-hold";
 
 interface ProductSellerGroup {
   id: string;
@@ -22,6 +23,8 @@ interface ProductSellerGroup {
     price: number;
     currency: string;
     stock_status: string;
+    is_held?: boolean;
+    hold_expires_at?: string | null;
   }>;
 }
 
@@ -227,15 +230,50 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   const totalCount = allGroups.length;
   const pagedGroups = allGroups.slice(offset, offset + limit);
 
-  const products = pagedGroups.map((g) => ({
-    id: g.id,
-    title: g.title,
-    thumbnail: g.thumbnail,
-    description: g.description,
-    seller: g.seller,
-    offers: g.offers,
-    matched_offer_count: g.offers.length,
-  }));
+  // Batch-fetch active confirmed holds for all offers in the page
+  const pageOfferIds = pagedGroups.flatMap((g) => g.offers.map((o) => o.id));
+  const activeHoldMap = new Map<string, { expires_at: string }>();
+
+  if (pageOfferIds.length > 0) {
+    try {
+      const sellerHoldService = req.scope.resolve(SELLER_HOLD_MODULE) as any;
+      const now = new Date();
+      const activeHolds = await sellerHoldService.listStockHolds({
+        offer_id: pageOfferIds,
+        status: "confirmed",
+        expires_at: { $gt: now },
+      });
+      for (const h of activeHolds || []) {
+        activeHoldMap.set(h.offer_id, {
+          expires_at: h.expires_at ? new Date(h.expires_at).toISOString() : "",
+        });
+      }
+    } catch (_e) {}
+  }
+
+  const products = pagedGroups.map((g) => {
+    const enrichedOffers = g.offers.map((o) => {
+      const holdInfo = activeHoldMap.get(o.id);
+      return {
+        ...o,
+        is_held: Boolean(holdInfo),
+        hold_expires_at: holdInfo ? holdInfo.expires_at : null,
+      };
+    });
+
+    const isGroupHeld = enrichedOffers.some((o) => o.is_held);
+
+    return {
+      id: g.id,
+      title: g.title,
+      thumbnail: g.thumbnail,
+      description: g.description,
+      seller: g.seller,
+      offers: enrichedOffers,
+      matched_offer_count: enrichedOffers.length,
+      is_held: isGroupHeld,
+    };
+  });
 
   res.json({
     products,

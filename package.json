@@ -3,6 +3,9 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "start": "cd packages/api && bun run start",
+    "start:api": "cd packages/api && bun run start",
+    "migrate:api": "cd packages/api && bun x medusa db:migrate",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

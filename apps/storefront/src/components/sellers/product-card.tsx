@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { buildProductEnquiryLink } from "@/lib/whatsapp";
+import { HoldButton } from "@/components/hold/hold-button";
 
 export interface ProductItem {
   id: string;
@@ -10,6 +11,8 @@ export interface ProductItem {
   min_price: number;
   max_price: number;
   currency: string;
+  offers?: Array<{ id: string; price: number; currency: string; is_held?: boolean }>;
+  is_held?: boolean;
 }
 
 export interface SellerSummary {
@@ -79,6 +82,11 @@ export function ProductCard({ product, seller }: ProductCardProps) {
               <span className="text-xs">No image preview</span>
             </div>
           )}
+          {product.is_held && (
+            <span className="absolute top-2 left-2 z-10 px-2 py-0.5 bg-amber-100/95 text-amber-800 text-[11px] font-bold rounded-md border border-amber-300 shadow-xs backdrop-blur-xs">
+              On Hold (24h)
+            </span>
+          )}
         </div>
 
         {/* Product Details */}
@@ -136,15 +144,15 @@ export function ProductCard({ product, seller }: ProductCardProps) {
             </button>
           )}
 
-          {/* 24h hold CTA - Disabled per prompt specification */}
-          <button
-            type="button"
-            disabled
-            title="Coming soon"
-            className="inline-flex items-center justify-center px-3 py-2 bg-gray-100 text-gray-400 text-xs font-medium rounded-lg cursor-not-allowed"
-          >
-            24h hold
-          </button>
+          {/* 24h hold CTA */}
+          <HoldButton
+            offerId={product.offers?.[0]?.id || product.id}
+            productTitle={product.title}
+            productThumbnail={product.thumbnail}
+            price={product.min_price || 0}
+            sellerName={seller.name}
+            isHeld={product.is_held}
+          />
         </div>
       </div>
     </div>

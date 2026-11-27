@@ -19,6 +19,7 @@ In India's Tier 2 and Tier 3 markets, national e-commerce platforms ship items f
 - **Invite-Gated Seller Onboarding:** Sellers register strictly using database-backed invite codes from platform admins or verified peer referrals.
 - **Referral Quota & Reputation:** Verified sellers earn referral quotas based on tenure and standing; if a referred seller is suspended, their referrer's standing and quotas are penalized.
 - **Public Local Search:** Buyer-facing search endpoints and storefront interface supporting city and PIN code filtering, returning only active, INR-priced offers.
+- **24-Hour Courtesy Request Holds:** Walk-in buyers can request a 24h stock hold on catalog items. Generates a tokenized digital pass (`/h/[token]`) with WhatsApp deep links and a 1-click confirmation URL for merchants. Includes anti-abuse caps (max 2 active holds, max 3 daily holds).
 - **INR-Only Commerce Lock:** Offers and pricing are restricted to Indian Rupees (`INR`), preventing cross-currency errors during the pilot.
 - **WhatsApp Direct Interaction:** Deep links from seller shop profiles and individual product listings directly launch WhatsApp chats pre-populated with seller and product context.
 - **Server-Side Rendered Storefront:** High-performance buyer storefront built on Next.js 16 with App Router, featuring responsive seller profiles, catalog grids, and dynamic metadata.
@@ -27,16 +28,17 @@ In India's Tier 2 and Tier 3 markets, national e-commerce platforms ship items f
 
 - **Backend:** MedusaJS v2 extended with Mercur marketplace modular framework.
 - **Storefront:** Next.js 16 with React 19 and Tailwind CSS.
-- **Database:** PostgreSQL with transactional schema links between seller profiles, addresses, and invite logs.
+- **Database:** PostgreSQL with transactional schema links between seller profiles, addresses, invite logs, and stock holds.
+- **Infrastructure & Deployment:** **Railway** (PostgreSQL + Node 22/Bun API) for current pilot; **Supabase** (managed PostgreSQL, connection pooler, and Supabase Studio) in future scaling roadmap. See [Deployment & Infrastructure Guide](docs/DEPLOYMENT_AND_INFRASTRUCTURE.md).
 - **Runtime:** Bun 1.2+ or Node.js 22+.
-- **Domain Flows:** Seller invite verification → multi-step registration workflow → address synchronization → referral quota validation → public rate-limited read API.
+- **Domain Flows:** Seller invite verification → multi-step registration workflow → address synchronization → referral quota validation → public rate-limited read API → 24-hour courtesy request hold lifecycle.
 
 > **Note on Commerce Features:** Standard e-commerce features (cart, checkout, payment gateways, and order management) are intentionally disabled in this build. Deals close off-platform directly between buyers and sellers on WhatsApp.
 
 ## Roadmap / Not Yet Built
 
 The following capabilities are planned for subsequent phases and are **not** present in the current release:
-- **24-Hour Hold:** Requesting inventory holds directly from seller storefront cards.
+- **Supabase PostgreSQL Transition:** Migrating from Railway PostgreSQL to Supabase managed PostgreSQL with Supavisor connection pooling and Supabase Studio access.
 - **RFQ Routing:** Broadcasting requests for quotation to multiple verified vendors in a district.
 - **Dedicated Mobile App:** Native Android and iOS applications for buyers and sellers.
 - **AI & Structured Data Integration:** Dedicated Model Context Protocol (MCP) server endpoints, `llms.txt`, and rich JSON-LD catalog feeds.
