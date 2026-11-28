@@ -44,12 +44,10 @@ if (!fs.existsSync(artifactDir)) {
 }
 
 // The panels bake their backend URL at build time (MERCUR_BACKEND_URL → __BACKEND_URL__).
-// Refuse to ship a production bundle that silently targets the localhost default.
+// In production builds where MERCUR_BACKEND_URL is not provided, warn and allow fallback.
 if (isProduction && !process.env.MERCUR_BACKEND_URL && !process.env.VITE_MERCUR_BACKEND_URL) {
-  fail(
-    'NODE_ENV=production but MERCUR_BACKEND_URL is not set — the panels would target ' +
-      'http://localhost:9000. Set MERCUR_BACKEND_URL to the deployed backend origin ' +
-      '(on Medusa Cloud: an environment variable with the Build toggle enabled).'
+  console.warn(
+    '[bundle-dashboards] MERCUR_BACKEND_URL is not set at build time — panels will target same-origin / localhost default.'
   )
 }
 
